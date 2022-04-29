@@ -1,0 +1,21 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+struct Grid {
+    float3 position;
+    float4 color;
+};
+
+RWStructuredBuffer<Grid> grids;
+float resolution;
+
+[numthreads(10,1,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    float xPos = id.x / resolution;
+
+    Grid grid = grids[id.x];
+    grid.color = float4(xPos, 0.0, 0.0, 1.0);
+
+    grids[id.x] = grid;
+}
